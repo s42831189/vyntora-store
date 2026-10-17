@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101828">
+  <title>VYNTORA — Online Shopping</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+    header{background:#101828;color:white;padding:18px 15px}
+    .brand{font-size:27px;font-weight:800;letter-spacing:2px}
+    .tagline{font-size:12px;color:#cbd5e1;margin-top:5px}
+    .search{display:flex;gap:8px;margin-top:15px}
+    .search input{flex:1;min-width:0;padding:12px;border:0;border-radius:9px;font-size:15px}
+    button{cursor:pointer;border:0;border-radius:8px;padding:10px 13px}
+    .search button{background:#f6b817;color:#111827;font-weight:bold}
+    nav{display:flex;gap:9px;overflow:auto;padding:12px;background:white}
+    nav button{white-space:nowrap;background:#eef2ff;color:#26345b}
+    .hero{margin:15px;padding:24px 18px;border-radius:15px;background:linear-gradient(130deg,#182848,#4b6cb7);color:white}
+    .hero h1{margin:0 0 10px;font-size:26px}
+    .hero p{line-height:1.5}
+    .hero button{background:#f6b817;font-weight:bold}
+    main{padding:0 15px 25px}
+    .section-title{font-size:20px;margin:22px 0 14px}
+    .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .card{background:white;border-radius:12px;padding:12px;box-shadow:0 2px 9px #1018280d}
+    .product-image{height:110px;border-radius:9px;background:#eef2f7;display:grid;place-items:center;font-size:48px}
+    .card h3{font-size:15px;margin:12px 0 7px}
+    .price{font-size:18px;font-weight:bold;color:#087443}
+    .old-price{font-size:12px;color:#8992a4;text-decoration:line-through}
+    .card button{width:100%;margin-top:10px;background:#101828;color:white}
+    .empty{grid-column:1/-1;text-align:center;padding:25px}
+    .cart-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid #e5e7eb;padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+    footer{text-align:center;padding:22px;color:#667085;font-size:13px}
+    @media(min-width:650px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}.product-image{height:150px}header,main,nav{padding-left:max(20px,calc((100% - 1000px)/2));padding-right:max(20px,calc((100% - 1000px)/2))}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">VYNTORA</div>
+    <div class="tagline">Your Style. Your Choice.</div>
+    <div class="search">
+      <input id="search" placeholder="পণ্য খুঁজুন / Search products">
+      <button onclick="renderProducts()">Search</button>
+    </div>
+  </header>
+
+  <nav>
+    <button onclick="filterCategory('All')">সব পণ্য</button>
+    <button onclick="filterCategory('Gadgets')">গ্যাজেট</button>
+    <button onclick="filterCategory('Watches')">ঘড়ি</button>
+    <button onclick="filterCategory('Fashion')">ফ্যাশন</button>
+    <button onclick="filterCategory('Accessories')">অ্যাক্সেসরিজ</button>
+  </nav>
+
+  <section class="hero">
+    <h1>Welcome to VYNTORA</h1>
+    <p>আপনার পছন্দের পণ্য কিনুন সহজেই। Quality products, great prices!</p>
+    <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+  </section>
+
+  <main>
+    <h2 class="section-title" id="heading">জনপ্রিয় পণ্য / Products</h2>
+    <div class="products" id="products"></div>
+  </main>
+
+  <div class="cart-bar">
+    <span>🛒 Cart: <b id="cart-count">0</b> items</span>
+    <b id="cart-total">৳0</b>
+  </div>
+
+  <footer>© 2026 VYNTORA. All rights reserved.</footer>
+
+  <script>
+    const products = [
+      {id:1,name:"Smart Watch",price:1250,category:"Watches",emoji:"⌚"},
+      {id:2,name:"Wireless Earbuds",price:950,category:"Gadgets",emoji:"🎧"},
+      {id:3,name:"Stylish Sunglasses",price:450,category:"Accessories",emoji:"🕶️"},
+      {id:4,name:"Fashion Watch",price:790,category:"Watches",emoji:"⌚"},
+      {id:5,name:"Power Bank",price:1849,category:"Gadgets",emoji:"🔋"},
+      {id:6,name:"Fashion Accessories",price:550,category:"Fashion",emoji:"✨"}
+    ];
+
+    let category = "All";
+    let cart = [];
+
+    function renderProducts(){
+      const query = document.getElementById("search").value.toLowerCase();
+      const list = products.filter(p =>
+        (category === "All" || p.category === category) &&
+        p.name.toLowerCase().includes(query)
+      );
+      document.getElementById("products").innerHTML = list.length
+        ? list.map(p => `
+          <article class="card">
+            <div class="product-image">${p.emoji}</div>
+            <h3>${p.name}</h3>
+            <div class="price">৳${p.price.toLocaleString("en-BD")}</div>
+            <button onclick="addToCart(${p.id})">Add to Cart</button>
+          </article>`).join("")
+        : '<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
+    }
+
+    function filterCategory(value){
+      category = value;
+      document.getElementById("heading").textContent =
+        value === "All" ? "জনপ্রিয় পণ্য / Products" : value;
+      renderProducts();
+    }
+
+    function addToCart(id){
+      cart.push(products.find(p => p.id === id));
+      document.getElementById("cart-count").textContent = cart.length;
+      document.getElementById("cart-total").textContent =
+        "৳" + cart.reduce((sum,p) => sum + p.price,0).toLocaleString("en-BD");
+    }
+
+    document.getElementById("search").addEventListener("input",renderProducts);
+    renderProducts();
+  </script>
+</body>
+</html>
