@@ -130,7 +130,17 @@
   } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    // এখানে তোমার কপি করা Firebase Config বসাবে
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBSc10APqBS_lwcf116Jo5m71oAB-aTsj4",
+  authDomain: "vyntora-online-shopping.firebaseapp.com",
+  databaseURL: "https://vyntora-online-shopping-default-rtdb.firebaseio.com",
+  projectId: "vyntora-online-shopping",
+  storageBucket: "vyntora-online-shopping.firebasestorage.app",
+  messagingSenderId: "1048388811348",
+  appId: "1:1048388811348:web:264cfda2ec5f8d63a0cbc1",
+  measurementId: "G-BQ05N5941M"
+};
   };
 
   const app = initializeApp(firebaseConfig);
@@ -147,6 +157,5 @@
 
   loadProducts();
 </script>
-
 </body>
 </html>
