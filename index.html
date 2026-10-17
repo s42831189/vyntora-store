@@ -120,5 +120,33 @@
     document.getElementById("search").addEventListener("input",renderProducts);
     renderProducts();
   </script>
+  
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    // এখানে তোমার কপি করা Firebase Config বসাবে
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function loadProducts() {
+    try {
+      const snapshot = await getDocs(collection(db, "products"));
+      console.log("Firebase products:", snapshot.size);
+    } catch (error) {
+      console.error("Firebase error:", error.message);
+    }
+  }
+
+  loadProducts();
+</script>
+
 </body>
 </html>
